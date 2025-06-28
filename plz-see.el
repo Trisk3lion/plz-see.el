@@ -102,6 +102,11 @@ or a buffer name to use a separate buffer."
   :type '(alist :key-type regexp
                 :value-type function))
 
+(defcustom plz-see-response-buffer-hooks ()
+  "Hooks called after the response buffer has been created.
+The functions are called with the response buffer as `current-buffer'."
+  :type 'list)
+
 (defvar-local plz-see-response nil
   "Store the `plz-response' object in a `plz-see' buffer.")
 
@@ -166,6 +171,7 @@ The car is the number of buffers created so far.")
       (save-excursion
         (insert body)
         (when mode (funcall mode)))
+      (run-hooks 'plz-see-response-buffer-hooks)
       (setq-local plz-see-response response)
       (setq header-line-format plz-see-header-line-format)
       (push buffer (cdr plz-see--buffers))
